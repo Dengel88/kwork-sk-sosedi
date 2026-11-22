@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>СК СОСЕДИ (Иркутск) - Прототип доработки каталога, 3 комплектаций и видео</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Work Sans', sans-serif; background: #fafaf9; color: #1c1917; font-variant-numeric: tabular-nums; }
+    h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+    .tier-btn[aria-pressed="true"] { background: #15803d; color: #fff; border-color: #15803d; }
+    .mobile-frame { max-width: 390px; margin: 0 auto; border: 8px solid #1e293b; border-radius: 32px; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.22); }
+  </style>
+</head>
+<body class="min-h-screen antialiased">
+
+  <!-- Top Review Bar: Toggle Desktop vs Mobile View (karkas-k.ru style) -->
+  <div class="bg-slate-900 text-white px-4 py-2.5 text-xs sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <span>Прототип доработки <strong>sk-sosedi.ru</strong> (фильтр + окно 3 комплектаций + видео + квиз + моб. версия)</span>
+      <div class="inline-flex rounded-lg bg-slate-800 p-1">
+        <button type="button" id="vp-desk" onclick="setViewport('desk')" class="cursor-pointer px-3 py-1 rounded bg-emerald-600 text-white font-semibold">ПК-версия</button>
+        <button type="button" id="vp-mob" onclick="setViewport('mob')" class="cursor-pointer px-3 py-1 rounded text-slate-300 hover:text-white font-semibold">Мобильный вид (390px)</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="site-wrapper" class="transition-all">
+    <!-- Header -->
+    <header class="bg-white border-b border-stone-200">
+      <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <div class="text-lg font-bold text-emerald-800 tracking-tight">СК СОСЕДИ · ИРКУТСК</div>
+          <div class="text-xs text-stone-500">Строительство теплых домов в Иркутске и области от 1,55 млн ₽</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="#catalog-pdf" class="px-3.5 py-2 rounded-xl bg-amber-100 text-amber-950 text-xs font-semibold">Скачать PDF-каталог</a>
+          <a href="#quiz-block" class="px-3.5 py-2 rounded-xl bg-emerald-700 text-white text-xs font-semibold">Рассчитать смету</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-10">
+
+      <!-- Task 10 + Task 2 + Task 7: Filter + Clickable House Cards -> 3 Tiers Modal -->
+      <section class="space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Задачи №2, №4, №7 и №10</span>
+            <h1 class="text-2xl sm:text-3xl font-bold text-stone-900 mt-0.5">Каталог проектов домов с выбором из 3 комплектаций</h1>
+          </div>
+          <!-- Filter Controls -->
+          <div class="flex flex-wrap gap-2 text-xs">
+            <select id="f-floors" onchange="renderHouses()" class="px-3 py-2 rounded-xl border border-stone-300 bg-white font-medium">
+              <option value="all">Этажность: Все</option>
+              <option value="1">1 этаж</option>
+              <option value="2">С мансардой / 2 этажа</option>
+            </select>
+            <select id="f-area" onchange="renderHouses()" class="px-3 py-2 rounded-xl border border-stone-300 bg-white font-medium">
+              <option value="all">Площадь: Любая</option>
+              <option value="small">До 85 м²</option>
+              <option value="large">От 85 м² и выше</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="houses-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      </section>
+
+      <!-- Task 1: Video Reviews Block (plusdacha.ru style) -->
+      <section class="bg-stone-900 text-white rounded-2xl p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">Задача №1 · Модуль живых видеообзоров</span>
+            <h2 class="text-xl font-bold mt-0.5">Посмотрите построенные дома и отзывы соседей по Иркутскому району</h2>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div onclick="playVideoDemo('Обзор дома Ангара-96 в Хомутово (зимний брус 180х180)')" class="cursor-pointer group rounded-xl bg-stone-800 border border-stone-700 p-4 space-y-3 hover:border-emerald-500 transition">
+            <div class="aspect-[9/12] rounded-lg bg-gradient-to-t from-black/80 via-emerald-950/60 to-stone-800 p-3 flex flex-col justify-between">
+              <span class="self-start px-2 py-0.5 rounded bg-emerald-600 text-[11px] font-semibold">01:24 · Обзор на участке</span>
+              <div>
+                <div class="font-bold text-sm">Дом «Ангара-96» в Хомутово</div>
+                <div class="text-stone-300 mt-0.5">Кликните для запуска видеоплеера</div>
+              </div>
+            </div>
+          </div>
+          <div onclick="playVideoDemo('Отзыв семьи Смирновых: дом на Байкальском тракте 15 км')" class="cursor-pointer group rounded-xl bg-stone-800 border border-stone-700 p-4 space-y-3 hover:border-emerald-500 transition">
+            <div class="aspect-[9/12] rounded-lg bg-gradient-to-t from-black/80 via-amber-950/50 to-stone-800 p-3 flex flex-col justify-between">
+              <span class="self-start px-2 py-0.5 rounded bg-amber-600 text-[11px] font-semibold">02:05 · Видеоотзыв после зимы</span>
+              <div>
+                <div class="font-bold text-sm">Байкальский тракт, 15 км</div>
+                <div class="text-stone-300 mt-0.5">Тепловизор в -34°C и расход на отопление</div>
+              </div>
+            </div>
+          </div>
+          <div onclick="playVideoDemo('Этапы сборки сруба и кровли за 28 дней в Маркова')" class="cursor-pointer group rounded-xl bg-stone-800 border border-stone-700 p-4 space-y-3 hover:border-emerald-500 transition">
+            <div class="aspect-[9/12] rounded-lg bg-gradient-to-t from-black/80 via-slate-900 to-stone-800 p-3 flex flex-col justify-between">
+              <span class="self-start px-2 py-0.5 rounded bg-sky-600 text-[11px] font-semibold">01:48 · Стройплощадка</span>
+              <div>
+                <div class="font-bold text-sm">Коттедж «Ольхон-128» в Маркова</div>
+                <div class="text-stone-300 mt-0.5">Фундамент, теплый угол и чистовая сдача</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="video-toast" class="hidden p-3 rounded-xl bg-emerald-950 border border-emerald-500/40 text-xs text-emerald-200"></div>
+      </section>
+
+      <!-- Task 3 + Task 6 + Bonus AI Advisor: Catalog Download & Updated Quiz -->
+      <section id="catalog-pdf" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-amber-50 border border-amber-200 rounded-2xl p-6 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="text-xs font-semibold text-amber-800 uppercase">Задача №3 · Лид-магнит каталога</span>
+            <h2 class="text-xl font-bold text-stone-900">Скачайте PDF-каталог ТОП-25 проектов 2026 года с планировками и ценами</h2>
+            <p class="text-xs text-stone-600 leading-relaxed">Мгновенно откроется ссылка на PDF + фиксация цели в Яндекс.Метрике (`reachGoal('download_catalog')`).</p>
+          </div>
+          <form onsubmit="event.preventDefault(); document.getElementById('cat-ok').classList.remove('hidden');" class="space-y-2.5 text-xs">
+            <input required type="tel" placeholder="Ваш телефон для отправки PDF" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-300 bg-white" />
+            <button type="submit" class="cursor-pointer w-full py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-semibold">Получить каталог проектов</button>
+            <div id="cat-ok" class="hidden text-emerald-800 font-semibold pt-1">Цель Метрики отправлена! Каталог открыт.</div>
+          </form>
+        </div>
+
+        <!-- Task 6: Revamped Quiz + AI Consultant -->
+        <div id="quiz-block" class="lg:col-span-7 bg-white border border-stone-200 rounded-2xl p-6 space-y-4 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-semibold text-emerald-700 uppercase">Задача №6 · Обновленный квиз + ИИ-подбор под участок</span>
+              <h2 class="text-xl font-bold text-stone-900">Расчет стоимости строительства за 30 секунд</h2>
+            </div>
+            <span id="quiz-step-label" class="text-xs font-semibold px-2.5 py-1 rounded bg-stone-100">Шаг 1 из 3</span>
+          </div>
+
+          <div id="quiz-body" class="space-y-3 text-xs sm:text-sm"></div>
+        </div>
+      </section>
+
+      <!-- Task 5: Our Works + Map -->
+      <section class="bg-white border border-stone-200 rounded-2xl p-6 space-y-3 shadow-sm">
+        <span class="text-xs font-semibold text-emerald-700 uppercase">Задача №5 · Наши работы и география выездов</span>
+        <h2 class="text-xl font-bold text-stone-900">Построенные объекты на карте Иркутска и области (48 сданных домов)</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-1">
+          <div class="p-3 rounded-xl bg-stone-50 border border-stone-200"><strong>Хомутово и Куда</strong><div class="text-stone-500 mt-0.5">19 домов сдано</div></div>
+          <div class="p-3 rounded-xl bg-stone-50 border border-stone-200"><strong>Байкальский тракт</strong><div class="text-stone-500 mt-0.5">11 коттеджей</div></div>
+          <div class="p-3 rounded-xl bg-stone-50 border border-stone-200"><strong>Маркова / Смоленщина</strong><div class="text-stone-500 mt-0.5">12 домов с гаражом</div></div>
+          <div class="p-3 rounded-xl bg-stone-50 border border-stone-200"><strong>Шелехов и Ангарск</strong><div class="text-stone-500 mt-0.5">6 домов под ключ</div></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Task 2: House Modal with Photos & 3 Equipment Tiers -->
+  <div id="house-modal" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-start justify-between border-b border-stone-200 pb-3">
+        <div>
+          <span id="m-meta" class="text-xs font-semibold text-emerald-700"></span>
+          <h3 id="m-title" class="text-xl font-bold text-stone-900"></h3>
+        </div>
+        <button type="button" onclick="closeHouseModal()" class="cursor-pointer p-1.5 text-stone-400 hover:text-stone-800 text-lg">✕</button>
+      </div>
+
+      <!-- Gallery Switcher -->
+      <div class="space-y-2">
+        <div id="m-photo-stage" class="aspect-video rounded-xl bg-gradient-to-br from-emerald-900 via-stone-800 to-stone-900 text-white p-5 flex flex-col justify-end">
+          <div id="m-photo-caption" class="text-xs font-medium bg-black/50 self-start px-3 py-1 rounded-lg">Главный фасад и терраса</div>
+        </div>
+        <div class="flex gap-2 text-xs">
+          <button type="button" onclick="setPhoto('Главный фасад и терраса')" class="cursor-pointer px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 font-medium">Фото 1: Фасад</button>
+          <button type="button" onclick="setPhoto('Планировка 1 этажа с экспликацией комнат')" class="cursor-pointer px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 font-medium">Фото 2: Планировка</button>
+          <button type="button" onclick="setPhoto('Реальное фото построенного дома в Иркутске')" class="cursor-pointer px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 font-medium">Фото 3: Живой объект</button>
+        </div>
+      </div>
+
+      <!-- 3 Equipment Tiers Selector -->
+      <div class="space-y-3 pt-1">
+        <div class="text-xs font-bold uppercase tracking-wider text-stone-500">Выберите вариант комплектации (3 пакета с ценами):</div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <button type="button" id="tier-0" aria-pressed="false" onclick="selectTier(0)" class="tier-btn cursor-pointer p-3 rounded-xl border border-stone-300 text-left transition">
+            <div class="text-xs font-bold">1. Теплый контур</div>
+            <div id="tier-price-0" class="text-sm font-bold mt-0.5"></div>
+          </button>
+          <button type="button" id="tier-1" aria-pressed="false" onclick="selectTier(1)" class="tier-btn cursor-pointer p-3 rounded-xl border border-stone-300 text-left transition">
+            <div class="text-xs font-bold">2. Предчистовая</div>
+            <div id="tier-price-1" class="text-sm font-bold mt-0.5"></div>
+          </button>
+          <button type="button" id="tier-2" aria-pressed="true" onclick="selectTier(2)" class="tier-btn cursor-pointer p-3 rounded-xl border border-stone-300 text-left transition">
+            <div class="text-xs font-bold">3. Под ключ (Зима)</div>
+            <div id="tier-price-2" class="text-sm font-bold mt-0.5"></div>
+          </button>
+        </div>
+
+        <div id="tier-spec-list" class="p-4 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-700 space-y-1.5"></div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-200">
+        <div>
+          <div class="text-xs text-stone-500">Итоговая стоимость выбранной комплектации:</div>
+          <div id="m-final-price" class="text-2xl font-bold text-emerald-800"></div>
+        </div>
+        <button type="button" onclick="closeHouseModal(); location.hash='#quiz-block';" class="cursor-pointer px-5 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm font-semibold">
+          Зафиксировать цену по договору
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const HOUSES = [
+      {
+        id: 1,
+        name: 'Проект «Байкал-72» с крытой террасой',
+        floors: '1',
+        areaCat: 'small',
+        area: '72 м² · 8х9 м · 2 спальни',
+        prices: ['1 550 000 ₽', '1 980 000 ₽', '2 450 000 ₽'],
+        specs: [
+          ['Ленточный ж/б фундамент', 'Стеновой комплект (брус 180х180 / каркас 200 мм)', 'Кровля металлочерепица + водосток'],
+          ['Все из пакета «Теплый контур»', 'Пятикамерные окна ПВХ (сибирский профиль 70 мм) + входная термодверь', 'Утепление пола и потолка 200 мм, черновые полы'],
+          ['Все из пакета «Предчистовая»', 'Разводка электрики, водоснабжения, септик и теплые полы', 'Чистовая отделка, натяжные потолки и межкомнатные двери - заезжай и живи']
+        ]
+      },
+      {
+        id: 2,
+        name: 'Проект «Ангара-98» для круглогодичной жизни',
+        floors: '1',
+        areaCat: 'large',
+        area: '98 м² · 9х11 м · 3 спальни + котельная',
+        prices: ['2 090 000 ₽', '2 640 000 ₽', '3 290 000 ₽'],
+        specs: [
+          ['Монолитная плита / лента с буронабивными сваями', 'Сруб из ангарской сосны 180х180 в теплый угол', 'Усиленная стропильная система и кровля'],
+          ['Все из пакета «Теплый контур»', 'Окна с энергосберегающим стеклопакетом, дверь с терморазрывом', 'Утепление перекрытий 250 мм под морозы до -40°C'],
+          ['Все из пакета «Предчистовая»', 'Электрокотел + водяной теплый пол по всему контуру', 'Полная чистовая отделка и сантехника под ключ']
+        ]
+      },
+      {
+        id: 3,
+        name: 'Проект «Ольхон-134» с мансардой и балконом',
+        floors: '2',
+        areaCat: 'large',
+        area: '134 м² · 9х9.5 м · 4 спальни + 2 санузла',
+        prices: ['2 650 000 ₽', '3 350 000 ₽', '4 120 000 ₽'],
+        specs: [
+          ['Ж/б фундамент по геологии участка', 'Домокомплект 2 этажа + межэтажные балки 200 мм', 'Кровля с паро- и гидроизоляцией'],
+          ['Все из пакета «Теплый контур»', 'Панорамное остекление гостиной + лестница на 2 этаж', 'Утепление мансардного контура базальтовой плитой'],
+          ['Все из пакета «Предчистовая»', 'Полная инженерия, скважина/септик, отопление 2 этажей', 'Чистовая отделка под ключ с гарантией 5 лет']
+        ]
+      }
+    ];
+
+    let activeHouse = HOUSES[0];
+    let activeTier = 2;
+    let quizStep = 1;
+
+    function setViewport(mode) {
+      const wrap = document.getElementById('site-wrapper');
+      document.getElementById('vp-desk').className = mode === 'desk' ? 'cursor-pointer px-3 py-1 rounded bg-emerald-600 text-white font-semibold' : 'cursor-pointer px-3 py-1 rounded text-slate-300 font-semibold';
+      document.getElementById('vp-mob').className = mode === 'mob' ? 'cursor-pointer px-3 py-1 rounded bg-emerald-600 text-white font-semibold' : 'cursor-pointer px-3 py-1 rounded text-slate-300 font-semibold';
+      wrap.className = mode === 'mob' ? 'mobile-frame my-4 bg-stone-50' : '';
+    }
+
+    function renderHouses() {
+      const fl = document.getElementById('f-floors').value;
+      const ar = document.getElementById('f-area').value;
+      const list = HOUSES.filter(h => (fl === 'all' || h.floors === fl) && (ar === 'all' || h.areaCat === ar));
+      document.getElementById('houses-grid').innerHTML = list.map(h => `
+        <article onclick="openHouseModal(${h.id})" class="cursor-pointer bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-md hover:border-emerald-600 transition flex flex-col justify-between">
+          <div class="aspect-[16/10] bg-gradient-to-br from-emerald-900 to-stone-800 text-white p-4 flex flex-col justify-between">
+            <span class="self-start px-2.5 py-0.5 rounded-full bg-white/20 text-[11px] font-medium">3 комплектации в окне</span>
+            <div class="text-xs text-emerald-200">${h.area}</div>
+          </div>
+          <div class="p-4 space-y-3">
+            <h3 class="font-bold text-base text-stone-900">${h.name}</h3>
+            <div class="flex items-baseline justify-between text-xs">
+              <span class="text-stone-500">Теплый контур от:</span>
+              <strong class="text-base text-emerald-800">${h.prices[0]}</strong>
+            </div>
+            <button type="button" class="w-full py-2.5 rounded-xl bg-emerald-50 text-emerald-800 hover:bg-emerald-700 hover:text-white text-xs font-semibold transition">
+              Смотреть фото и 3 цены комплектаций
+            </button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function openHouseModal(id) {
+      activeHouse = HOUSES.find(x => x.id === id) || HOUSES[0];
+      document.getElementById('m-meta').textContent = activeHouse.area;
+      document.getElementById('m-title').textContent = activeHouse.name;
+      [0, 1, 2].forEach(i => {
+        document.getElementById('tier-price-' + i).textContent = activeHouse.prices[i];
+      });
+      selectTier(2);
+      document.getElementById('house-modal').classList.remove('hidden');
+    }
+
+    function closeHouseModal() {
+      document.getElementById('house-modal').classList.add('hidden');
+    }
+
+    function setPhoto(cap) {
+      document.getElementById('m-photo-caption').textContent = cap;
+    }
+
+    function selectTier(idx) {
+      activeTier = idx;
+      [0, 1, 2].forEach(i => {
+        document.getElementById('tier-' + i).setAttribute('aria-pressed', i === idx ? 'true' : 'false');
+      });
+      document.getElementById('m-final-price').textContent = activeHouse.prices[idx];
+      document.getElementById('tier-spec-list').innerHTML = activeHouse.specs[idx].map(s => `<div>✓ ${s}</div>`).join('');
+    }
+
+    function playVideoDemo(title) {
+      const t = document.getElementById('video-toast');
+      t.classList.remove('hidden');
+      t.textContent = 'Открыт плеер видеомодуля: «' + title + '» (поддерживает ленивую подгрузку без просадки скорости сайта).';
+    }
+
+    function renderQuiz() {
+      document.getElementById('quiz-step-label').textContent = 'Шаг ' + quizStep + ' из 3';
+      const box = document.getElementById('quiz-body');
+      if (quizStep === 1) {
+        box.innerHTML = `
+          <div class="font-semibold text-stone-800">1. Какую технологию рассматриваете для климата Иркутска?</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" onclick="quizStep=2;renderQuiz();" class="cursor-pointer p-3 rounded-xl border border-stone-300 hover:border-emerald-600 text-left"><strong>Профилированный / строганный брус 180х180</strong><div class="text-xs text-stone-500">Экологичная ангарская сосна</div></button>
+            <button type="button" onclick="quizStep=2;renderQuiz();" class="cursor-pointer p-3 rounded-xl border border-stone-300 hover:border-emerald-600 text-left"><strong>Энергоэффективный каркас 200 мм</strong><div class="text-xs text-stone-500">Без усадки, заезд за 2 месяца</div></button>
+          </div>
+        `;
+      } else if (quizStep === 2) {
+        box.innerHTML = `
+          <div class="font-semibold text-stone-800">2. Нужна ли помощь с сельской/семейной ипотекой или подбором участка?</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" onclick="quizStep=3;renderQuiz();" class="cursor-pointer p-3 rounded-xl border border-stone-300 hover:border-emerald-600 text-left"><strong>Участок уже есть, строим за наличные/ипотеку</strong></button>
+            <button type="button" onclick="quizStep=3;renderQuiz();" class="cursor-pointer p-3 rounded-xl border border-stone-300 hover:border-emerald-600 text-left"><strong>Нужен подбор участка в Иркутском р-не</strong></button>
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950">
+            <strong>Предварительная вилка по вашим параметрам: 2,15 - 2,85 млн ₽.</strong> Оставьте номер, пришлем смету в 3 комплектациях и планировки!
+          </div>
+          <div class="flex gap-2">
+            <input type="tel" placeholder="+7 (900) 000-00-00" class="flex-1 px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs" />
+            <button type="button" onclick="quizStep=1;renderQuiz();alert('Заявка ушла + событие Яндекс.Метрики зафиксировано!');" class="cursor-pointer px-4 py-2.5 rounded-xl bg-emerald-700 text-white text-xs font-semibold">Получить смету</button>
+          </div>
+        `;
+      }
+    }
+
+    renderHouses();
+    renderQuiz();
+  </script>
+</body>
+</html>
